@@ -124,5 +124,12 @@ deterministic business logic
 testability
 extensibility for real-world systems
 
+## Limitation
 
+This project is intentionally simplified and does not include:
+real-time data ingestion
+distributed processing
+concurrency handling
+machine learning-based prediction
+It is designed as a clean engineering prototype, not a production healthcare system.
 
