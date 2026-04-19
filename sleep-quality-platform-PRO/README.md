@@ -1,7 +1,7 @@
 
 # Sleep Quality Analyzer
 
-A modular Python system that evaluates sleep quality based on physiological sleep-stage criteria (REM, deep, wake, total duration).
+A modular Python system that evaluates sleep quality based on physiological sleep-stage criteria (REM, deep, wake, total duration). The project is designed with clean architecture principles, separation of concerns, and testability in mind.
 
 ## Overview
 
@@ -15,20 +15,27 @@ SCADENTE
 DISCRETA
 BUONA
 ECCELLENTE
+The goal is to simulate a simplified but realistic sleep analysis engine similar to those used in health-tracking systems.
 
 ## Key features
 
 Modular architecture (separation of concerns)
 Rule-based scoring engine
 Command-line interface (CLI)
-Automated testing with pytest
-Extensible core logic (no coupling with I/O)
+Unit testing with pytest
+Easily extensible core logic (ready for API or web integration)
 
 ## Architecture
 
 core/        → Business logic (sleep evaluation engine)
 cli/         → Command-line interface
 tests/       → Unit tests (pytest)
+
+Design Principles
+Separation of concerns: business logic is completely independent from input/output
+Testability-first design: core logic is fully unit-testable
+Extensibility: architecture allows easy integration with REST APIs or dashboards
+Deterministic computation: same input always produces same output
 
 ## Installation
 
@@ -48,29 +55,49 @@ wake rem deep light
 ...
  ## Output
  
-The program outputs:
-Number of valid sleep sessions
-Min / Max / Average total sleep duration
-Quality classification per session
-Top 5 longest sleep sessions
+The program produces:
+Number of valid sleep sessions above target
+Minimum, Maximum and Average total sleep duration
+Quality classification for each session
+Top 5 longest sleep sessions (sorted ascending)
 
 ## Testing 
 
 pytest
 
+Covered scenarios:
+sleep duration calculation
+scoring logic correctness
+classification boundaries
+edge cases
+
 ## Design Choices
 
-Separation of concerns: core logic isolated from CLI
-Deterministic algorithm: no randomness, fully reproducible
-Scalable structure: easy to extend with API or web dashboard
-Testability-first design
+Separation of concerns:
+Business logic is isolated in the core/ module to ensure reusability across CLI, API, or UI layers.
+Deterministic scoring system:
+The evaluation algorithm is rule-based, ensuring reproducibility and explainability (important in healthcare-related systems).
+Lightweight architecture:
+No external dependencies for core logic, making the system portable and easy to integrate.
+Testability-first approach:
+Core logic is designed to be fully unit-testable without requiring file I/O or UI components.
+
 
 ## Future Improvements
 
-REST API (FastAPI integration)
-Database persistence (SQLite/PostgreSQL)
-Sleep trend visualization dashboard
-Machine learning-based sleep quality prediction
+REST API using FastAPI for remote data processing
+Database persistence (SQLite → PostgreSQL migration path)
+Interactive dashboard for sleep trend visualization
+Machine learning model for predictive sleep quality scoring
+Real-time data ingestion from wearable devices
+
+## Author
+
+Developed as a software engineering portfolio project focused on:
+modular design
+clean architecture
+test-driven development principles
+real-world system simulation
 
 
 
