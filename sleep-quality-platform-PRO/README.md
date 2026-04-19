@@ -1,7 +1,12 @@
 
 # Sleep Quality Analyzer
 
-A modular Python system that evaluates sleep quality based on physiological sleep-stage criteria (REM, deep, wake, total duration). The project is designed with clean architecture principles, separation of concerns, and testability in mind.
+A modular Python system that evaluates sleep quality based on physiological sleep-stage criteria (REM, deep, wake, total duration). The project is designed with clean architecture principles, testability-first design, and clear separation between business logic and interface layers.
+
+## Problem statement
+
+Sleep tracking devices generate raw sleep-stage data, but interpreting this data into meaningful sleep quality insights requires structured analysis.
+This system transforms raw sleep session inputs into a standardized sleep quality classification, making the data interpretable and consistent.
 
 ## Overview
 
@@ -81,6 +86,11 @@ Lightweight architecture:
 No external dependencies for core logic, making the system portable and easy to integrate.
 Testability-first approach:
 Core logic is designed to be fully unit-testable without requiring file I/O or UI components.
+Separation of core logic:
+Business logic is fully isolated in the core/ module to allow:
+reuse in APIs or web applications
+independent unit testing
+easier refactoring and scaling
 
 
 ## Future Improvements
@@ -98,6 +108,21 @@ modular design
 clean architecture
 test-driven development principles
 real-world system simulation
+
+## Project purpose
+This project was developed as a software engineering portfolio project to demonstrate:
+modular system design
+clean architecture principles
+test-driven development mindset
+ability to design scalable backend systems
+
+## Summary
+
+This system demonstrates a production-inspired architecture in Python, focusing on:
+clean separation of concerns
+deterministic business logic
+testability
+extensibility for real-world systems
 
 
 
