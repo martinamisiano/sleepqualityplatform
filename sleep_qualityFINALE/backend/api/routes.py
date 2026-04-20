@@ -1,12 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Request
 from backend.core.schemas import UserInput, PredictionResponse
 from backend.services.prediction_service import predict
-import time
 from collections import defaultdict
 from datetime import datetime, timedelta
-from fastapi import Request
-from fastapi import APIRouter, HTTPException, Depends, Request
+import logging
+
+# Logger configuration
 logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/v1", tags=["predictions"])
 
 # Rate limiting semplice
@@ -34,11 +35,12 @@ async def predict_sleep(data: UserInput, request: Request):
     try:
         rate_limit_check(client_ip)
         result = predict(data.dict())
-        return result
         logger.info(f"Predizione per IP {client_ip}: età={data.age}, stress={data.stress_level}")
+        return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        logger.error(f"Errore per IP {client_ip}: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/health")
