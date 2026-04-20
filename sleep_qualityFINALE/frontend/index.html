@@ -1,48 +1,250 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Sleep Dashboard</title>
-<style>
-body { font-family: Arial; text-align:center; }
-input { margin:5px; padding:5px; }
-button { padding:10px; margin:5px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Quality Predictor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            display: none;
+        }
+        .result.show { display: block; }
+        .quality {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .quality.Excellent { color: #28a745; }
+        .quality.Good { color: #17a2b8; }
+        .quality.Fair { color: #ffc107; }
+        .quality.Poor { color: #dc3545; }
+        .confidence {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #666;
+        }
+        .factors, .suggestions {
+            margin-top: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+        .factors h4, .suggestions h4 {
+            margin-bottom: 8px;
+            color: #555;
+        }
+        .loading {
+            text-align: center;
+            display: none;
+            margin-top: 20px;
+        }
+        .loading.show { display: block; }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        .error.show { display: block; }
+    </style>
 </head>
 <body>
-<h1>Sleep Quality App</h1>
+    <div class="container">
+        <h1>😴 Sleep Quality Predictor</h1>
+        <div class="subtitle">AI-powered sleep quality assessment</div>
+        
+        <div class="form-group">
+            <label>Age (years)</label>
+            <input type="number" id="age" placeholder="e.g., 30">
+        </div>
+        
+        <div class="form-group">
+            <label>Stress Level (0-10)</label>
+            <input type="number" id="stress" placeholder="e.g., 5" step="0.1">
+        </div>
+        
+        <div class="form-group">
+            <label>Physical Activity (hours/day)</label>
+            <input type="number" id="activity" placeholder="e.g., 3" step="0.5">
+        </div>
+        
+        <div class="form-group">
+            <label>BMI</label>
+            <input type="number" id="bmi" placeholder="e.g., 22.5" step="0.1">
+        </div>
+        
+        <button onclick="predictSleep()">Predict Sleep Quality</button>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing your data...</p>
+        </div>
+        
+        <div class="result" id="result">
+            <div class="quality" id="quality"></div>
+            <div class="confidence" id="confidence"></div>
+            <div class="factors" id="factors"></div>
+            <div class="suggestions" id="suggestions"></div>
+        </div>
+        
+        <div class="error" id="error"></div>
+    </div>
 
-<input id="age" placeholder="Age"><br>
-<input id="stress" placeholder="Stress"><br>
-<input id="activity" placeholder="Activity"><br>
-<input id="bmi" placeholder="BMI"><br>
-
-<button onclick="predict()">Predict</button>
-
-<h2 id="res"></h2>
-<h3 id="factors"></h3>
-
-<script>
-async function predict(){
- const data={
-  age:+age.value,
-  stress:+stress.value,
-  activity:+activity.value,
-  bmi:+bmi.value
- };
-
- const r=await fetch("http://127.0.0.1:8000/predict",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify(data)
- });
-
- const j=await r.json();
- res.innerText = "Sleep Quality: " + j.sleep_quality;
- confidence.innerText = "Confidence: " + j.confidence;
- factors.innerText = "Top factors: " + j.top_factors.join(", ");
- suggestions.innerText = "Suggestions: " + j.suggestions.join(", ");
-
-}
-</script>
+    <script>
+        const API_URL = 'http://localhost:8000/v1';
+        
+        async function predictSleep() {
+            const age = document.getElementById('age').value;
+            const stress = document.getElementById('stress').value;
+            const activity = document.getElementById('activity').value;
+            const bmi = document.getElementById('bmi').value;
+            
+            if (!age || !stress || !activity || !bmi) {
+                showError('Please fill all fields');
+                return;
+            }
+            
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('result').classList.remove('show');
+            document.getElementById('error').classList.remove('show');
+            
+            try {
+                const response = await fetch(`${API_URL}/predict`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        age: parseInt(age),
+                        stress_level: parseFloat(stress),
+                        physical_activity: parseFloat(activity),
+                        bmi: parseFloat(bmi)
+                    })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Prediction failed');
+                }
+                
+                const data = await response.json();
+                displayResult(data);
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+            }
+        }
+        
+        function displayResult(data) {
+            const qualityEl = document.getElementById('quality');
+            qualityEl.textContent = data.sleep_quality;
+            qualityEl.className = `quality ${data.sleep_quality}`;
+            
+            document.getElementById('confidence').textContent = 
+                `Confidence: ${(data.confidence * 100).toFixed(1)}%`;
+            
+            document.getElementById('factors').innerHTML = `
+                <h4>🎯 Key Factors</h4>
+                <ul>${data.top_factors.map(f => `<li>${f}</li>`).join('')}</ul>
+            `;
+            
+            document.getElementById('suggestions').innerHTML = `
+                <h4>💡 Suggestions</h4>
+                <ul>${data.suggestions.map(s => `<li>${s}</li>`).join('')}</ul>
+            `;
+            
+            document.getElementById('result').classList.add('show');
+        }
+        
+        function showError(message) {
+            const errorEl = document.getElementById('error');
+            errorEl.textContent = `❌ ${message}`;
+            errorEl.classList.add('show');
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
+        }
+    </script>
 </body>
 </html>
