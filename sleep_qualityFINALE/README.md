@@ -138,6 +138,12 @@ python backend/app.py
   "sleep_quality": "Good"
 }
 
+The system provides:
+- prediction
+- confidence score
+- key influencing factors
+- personalized suggestions
+  
 ## Model
 
 The model is trained on a sleep health dataset and uses supervised learning to classify sleep quality.
