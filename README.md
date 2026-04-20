@@ -1,4 +1,4 @@
-# 😴 Sleep Quality Predictor
+#  Sleep Quality Predictor
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green.svg)](https://fastapi.tiangolo.com/)
@@ -7,11 +7,11 @@
 
 An **end-to-end machine learning platform** that predicts sleep quality based on lifestyle factors (age, stress, physical activity, BMI). Built with production-ready practices: modular architecture, comprehensive testing, containerization, and API versioning.
 
-> ⚠️ **Educational Purpose Only** – Not intended for medical use or clinical decisions.
+>  **Educational Purpose Only** – Not intended for medical use or clinical decisions.
 
 ---
 
-## 🎯 Problem Statement
+##  Problem Statement
 
 Sleep tracking devices generate raw data, but interpreting this data into meaningful insights requires structured analysis. This system bridges the gap by providing:
 - **Real-time predictions** based on lifestyle factors
@@ -20,21 +20,21 @@ Sleep tracking devices generate raw data, but interpreting this data into meanin
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 | Feature | Implementation |
 |---------|----------------|
-| 🤖 **ML Pipeline** | RandomForest with GridSearchCV optimization |
-| 📊 **Explainability** | Feature importance + personalized suggestions |
-| 🚀 **API** | FastAPI with auto-docs, validation, rate limiting |
-| 🧪 **Testing** | Unit + integration tests (pytest) |
-| 🐳 **Containerization** | Docker-ready with multi-stage build |
-| 📈 **Monitoring** | Health checks + model metadata endpoints |
-| 🔄 **Versioning** | API versioning (`/v1/predict`) |
+|  **ML Pipeline** | RandomForest with GridSearchCV optimization |
+|  **Explainability** | Feature importance + personalized suggestions |
+|  **API** | FastAPI with auto-docs, validation, rate limiting |
+|  **Testing** | Unit + integration tests (pytest) |
+|  **Containerization** | Docker-ready with multi-stage build |
+|  **Monitoring** | Health checks + model metadata endpoints |
+|  **Versioning** | API versioning (`/v1/predict`) |
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 ┌─────────────┐ ┌──────────────┐ ┌─────────────────┐
 │ Frontend │────▶│ FastAPI │────▶│ ML Model │
 │ (HTML/JS) │ │ (v1 API) │ │ (RandomForest) │
@@ -66,7 +66,7 @@ sleepqualityplatform/
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Local Development
 
@@ -122,8 +122,8 @@ Response:
   "confidence": 0.82,
   "top_factors": ["stress", "activity"],
   "suggestions": [
-    "🧘 Practice mindfulness or meditation before bed",
-    "🏃 Increase daily physical activity (aim for 30min/day)"
+    " Practice mindfulness or meditation before bed",
+    " Increase daily physical activity (aim for 30min/day)"
   ],
   "probabilities": {
     "Poor": 0.05,
