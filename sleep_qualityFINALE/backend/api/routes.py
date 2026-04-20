@@ -1,9 +1,44 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Depends
+from backend.core.schemas import UserInput, PredictionResponse
 from backend.services.prediction_service import predict
-from backend.core.schemas import UserInput
+import time
+from collections import defaultdict
+from datetime import datetime, timedelta
 
-router = APIRouter()
+router = APIRouter(prefix="/v1", tags=["predictions"])
 
-@router.post("/predict")
-def predict_sleep(data: UserInput):
-    return predict(data.dict())
+# Rate limiting semplice
+rate_limits = defaultdict(list)
+
+def rate_limit_check(client_ip: str, max_requests: int = 10, window_seconds: int = 60):
+    now = datetime.now()
+    rate_limits[client_ip] = [
+        req_time for req_time in rate_limits[client_ip]
+        if now - req_time < timedelta(seconds=window_seconds)
+    ]
+    
+    if len(rate_limits[client_ip]) >= max_requests:
+        raise HTTPException(status_code=429, detail="Too many requests")
+    
+    rate_limits[client_ip].append(now)
+
+@router.post("/predict", response_model=PredictionResponse)
+async def predict_sleep(data: UserInput, client_ip: str = "default"):
+    try:
+        rate_limit_check(client_ip)
+        result = predict(data.dict())
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@router.get("/health")
+async def health_check():
+    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+
+@router.get("/model/info")
+async def model_info():
+    from backend.services.prediction_service import get_predictor
+    predictor = get_predictor()
+    return predictor.metadata
