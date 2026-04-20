@@ -1,5 +1,11 @@
 # sleepqualityplatform
 Sleep Quality Analyzer is a modular Python project that evaluates sleep quality based on biological criteria such as REM, deep sleep, wake time, and total duration. It includes a CLI interface, a separated core logic module, and automated tests to ensure correctness and maintainability.
+Sleep quality is a critical factor in overall health and daily performance.
+This project provides a platform that allows users to:
+Input personal and lifestyle data
+Predict sleep quality using a trained ML model
+Receive insights about factors affecting sleep
+The goal is to demonstrate how data-driven approaches can support personal health awareness.
 
 # Sleep Quality Analyzer
 
@@ -31,18 +37,22 @@ Rule-based scoring engine
 Command-line interface (CLI)
 Unit testing with pytest
 Easily extensible core logic (ready for API or web integration)
+Sleep quality prediction (ML model)
+Input-based analysis (e.g. stress level, activity, BMI, etc.)
+Modular backend structure
+Model integration for real-time inference
 
 ## Architecture
 
-core/        → Business logic (sleep evaluation engine)
-cli/         → Command-line interface
-tests/       → Unit tests (pytest)
-
-Design Principles
-Separation of concerns: business logic is completely independent from input/output
-Testability-first design: core logic is fully unit-testable
-Extensibility: architecture allows easy integration with REST APIs or dashboards
-Deterministic computation: same input always produces same output
+The project is structured into two main components:
+ML Pipeline
+  Data preprocessing
+  Model training
+  Model serialization
+Backend Application
+  API endpoints
+  Model loading and inference
+  Request/response handling
 
 ## Installation
 
@@ -68,69 +78,76 @@ Minimum, Maximum and Average total sleep duration
 Quality classification for each session
 Top 5 longest sleep sessions (sorted ascending)
 
-## Testing 
+## Architecture
 
-pytest
+The project is structured into two main components:
+ML Pipeline
+  Data preprocessing
+  Model training
+  Model serialization
+Backend Application
+  API endpoints
+  Model loading and inference
+  Request/response handling
+  
+## Tech Stack
+Python
+Machine Learning (scikit-learn / pandas / numpy)
+Backend framework (Flask / FastAPI – adjust if needed)
+Jupyter Notebook (for experimentation)
 
-Covered scenarios:
-sleep duration calculation
-scoring logic correctness
-classification boundaries
-edge cases
+## Project Structure
 
-## Design Choices
+sleep-quality-platform/
+│
+├── backend/
+│   ├── app.py
+│   ├── routes/
+│   ├── services/
+│   └── model/
+│
+├── ml/
+│   ├── training.py
+│   ├── preprocessing.py
+│   └── dataset/
+│
+├── notebooks/
+├── requirements.txt
+└── README.md
 
-Separation of concerns:
-Business logic is isolated in the core/ module to ensure reusability across CLI, API, or UI layers.
-Deterministic scoring system:
-The evaluation algorithm is rule-based, ensuring reproducibility and explainability (important in healthcare-related systems).
-Lightweight architecture:
-No external dependencies for core logic, making the system portable and easy to integrate.
-Testability-first approach:
-Core logic is designed to be fully unit-testable without requiring file I/O or UI components.
-Separation of core logic:
-Business logic is fully isolated in the core/ module to allow:
-reuse in APIs or web applications
-independent unit testing
-easier refactoring and scaling
+## Installation
 
+git clone https://github.com/martinamisiano/sleepqualityplatform.git
+cd sleepqualityplatform
+pip install -r requirements.txt
+▶️ Run the application
+python backend/app.py
+
+## Example Input
+{
+  "age": 25,
+  "stress_level": 7,
+  "physical_activity": 3,
+  "bmi": 22.5
+}
+
+## Example Output
+
+{
+  "sleep_quality": "Good"
+}
+
+## Model
+
+The model is trained on a sleep health dataset and uses supervised learning to classify sleep quality.
+Note: Performance may vary depending on dataset quality and generalization limits.
 
 ## Future Improvements
-
-REST API using FastAPI for remote data processing
-Database persistence (SQLite → PostgreSQL migration path)
-Interactive dashboard for sleep trend visualization
-Machine learning model for predictive sleep quality scoring
-Real-time data ingestion from wearable devices
-
-## Author
-
-Developed as a software engineering portfolio project focused on:
-modular design
-clean architecture
-test-driven development principles
-real-world system simulation
-
-## Project purpose
-This project was developed as a software engineering portfolio project to demonstrate:
-modular system design
-clean architecture principles
-test-driven development mindset
-ability to design scalable backend systems
-
-## Summary
-
-This system demonstrates a production-inspired architecture in Python, focusing on:
-clean separation of concerns
-deterministic business logic
-testability
-extensibility for real-world systems
-
-## Limitation
-
-This project is intentionally simplified and does not include:
-real-time data ingestion
-distributed processing
-concurrency handling
-machine learning-based prediction
-It is designed as a clean engineering prototype, not a production healthcare system.
+Add frontend dashboard
+Improve model generalization
+Add user history tracking
+Deploy as a cloud service
+##  Disclaimer
+This project is for educational purposes only and is not intended for medical use.
+##Author
+Martina Misiano
