@@ -6,7 +6,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 from fastapi import Request
 from fastapi import APIRouter, HTTPException, Depends, Request
-
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/v1", tags=["predictions"])
 
 # Rate limiting semplice
@@ -35,6 +35,7 @@ async def predict_sleep(data: UserInput, request: Request):
         rate_limit_check(client_ip)
         result = predict(data.dict())
         return result
+        logger.info(f"Predizione per IP {client_ip}: età={data.age}, stress={data.stress_level}")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
