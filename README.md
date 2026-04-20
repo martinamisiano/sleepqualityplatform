@@ -1,159 +1,145 @@
-# sleepqualityplatform
-Sleep Quality Analyzer is a modular Python project that evaluates sleep quality based on biological criteria such as REM, deep sleep, wake time, and total duration. It includes a CLI interface, a separated core logic module, and automated tests to ensure correctness and maintainability.
-Sleep quality is a critical factor in overall health and daily performance.
-This project provides a platform that allows users to:
-Input personal and lifestyle data
-Predict sleep quality using a trained ML model
-Receive insights about factors affecting sleep
-The goal is to demonstrate how data-driven approaches can support personal health awareness.
+# Sleep Quality Predictor
 
-# Sleep Quality Analyzer
+A lightweight **end-to-end ML platform** that predicts sleep quality based on lifestyle factors (age, stress, physical activity, BMI).  
+The project demonstrates **modular backend architecture**, **model explainability**, and **API-first design** – concepts directly transferable to production systems.
 
-A modular Python system that evaluates sleep quality based on physiological sleep-stage criteria (REM, deep, wake, total duration). The project is designed with clean architecture principles, testability-first design, and clear separation between business logic and interface layers.
+> **Disclaimer:** This is an **educational proof-of-concept**, not a medical tool. The current model is trained on a small dataset for demonstration purposes.
 
-## Problem statement
+---
 
-Sleep tracking devices generate raw sleep-stage data, but interpreting this data into meaningful sleep quality insights requires structured analysis.
-This system transforms raw sleep session inputs into a standardized sleep quality classification, making the data interpretable and consistent.
+## What It Does
 
-## Overview
+- Accepts user input (age, stress level, activity level, BMI) via a **REST API** (FastAPI)
+- Returns:
+  - Predicted sleep quality (e.g., "Good" / "Poor")
+  - Confidence score
+  - Top 2 influencing factors (e.g., stress, activity)
+  - Personalized suggestions
+- Provides a **simple HTML/JavaScript frontend** to interact with the API
 
-Sleep Quality Analyzer processes sleep session data and computes a quality score based on four biologically inspired rules:
-Total sleep duration vs target
-REM sleep percentage
-Deep sleep percentage
-Wake time percentage
-Each sleep session is classified into one of:
-SCADENTE
-DISCRETA
-BUONA
-ECCELLENTE
-The goal is to simulate a simplified but realistic sleep analysis engine similar to those used in health-tracking systems.
+---
 
-## Key features
+## Technical Highlights
 
-Modular architecture (separation of concerns)
-Rule-based scoring engine
-Command-line interface (CLI)
-Unit testing with pytest
-Easily extensible core logic (ready for API or web integration)
-Sleep quality prediction (ML model)
-Input-based analysis (e.g. stress level, activity, BMI, etc.)
-Modular backend structure
-Model integration for real-time inference
+| Area | Implementation |
+|------|----------------|
+| **API Framework** | FastAPI (async, auto-docs, Pydantic validation) |
+| **ML Model** | RandomForestClassifier with feature importance |
+| **Explainability** | Real-time extraction of top contributing features |
+| **Testing** | Pytest (unit tests for prediction service) |
+| **Logging** | Python `logging` module (configurable) |
+| **CORS** | Enabled for local frontend integration |
+| **Containerization** | Docker-ready (Dockerfile included) |
 
-## Architecture
+---
 
-The project is structured into two main components:
-ML Pipeline
-  Data preprocessing
-  Model training
-  Model serialization
-Backend Application
-  API endpoints
-  Model loading and inference
-  Request/response handling
+## Project Structure (Current)
 
-## Installation
-
-git clone https://github.com/martinamisiano/sleepqualityplatform.git
-cd sleepqualityplatform
-pip install -r requirements.txt
-
-## Usage
-
-python cli/main.py example_input.txt
-
-## Input format
-
-TARGET
-wake rem deep light
-wake rem deep light
-...
- ## Output
- 
-The program produces:
-Number of valid sleep sessions above target
-Minimum, Maximum and Average total sleep duration
-Quality classification for each session
-Top 5 longest sleep sessions (sorted ascending)
-
-## Architecture
-
-The project is structured into two main components:
-ML Pipeline
-  Data preprocessing
-  Model training
-  Model serialization
-Backend Application
-  API endpoints
-  Model loading and inference
-  Request/response handling
-  
-## Tech Stack
-Python
-Machine Learning (scikit-learn / pandas / numpy)
-Backend framework (Flask / FastAPI – adjust if needed)
-Jupyter Notebook (for experimentation)
-
-## Project Structure
-
-sleep-quality-platform/
-│
+sleepqualityplatform/
 ├── backend/
-│   ├── app.py
-│   ├── routes/
-│   ├── services/
-│   └── model/
-│
+│ ├── main.py # FastAPI app entrypoint
+│ ├── api/
+│ │ └── routes.py # /predict endpoint
+│ ├── core/
+│ │ └── schemas.py # Pydantic models
+│ ├── services/
+│ │ └── prediction_service.py # Model loading & inference
+│ └── model/
+│ └── model.pkl # Serialized RandomForest
 ├── ml/
-│   ├── training.py
-│   ├── preprocessing.py
-│   └── dataset/
-│
-├── notebooks/
+│ └── train.py # Model training script (⚠️ tiny dataset)
+├── tests/
+│ └── test_api.py # Basic unit tests
+├── frontend/
+│ └── index.html # Minimal test UI
 ├── requirements.txt
-└── README.md
+└── Dockerfile
 
-## Installation
 
+---
+
+##  Quick Start
+
+```bash
+# Clone the repository
 git clone https://github.com/martinamisiano/sleepqualityplatform.git
 cd sleepqualityplatform
+
+# Install dependencies
 pip install -r requirements.txt
-▶️ Run the application
-python backend/app.py
 
-## Example Input
+# Start the backend
+uvicorn backend.main:app --reload
+
+# Open frontend (in another terminal or just double-click)
+open frontend/index.html
+
+The API will be available at http://localhost:8000
+Interactive docs: http://localhost:8000/docs
+
+## API Usage
+Endpoint: POST /predict
+
+Request body:
 {
-  "age": 25,
-  "stress_level": 7,
-  "physical_activity": 3,
-  "bmi": 22.5
+  "age": 30,
+  "stress": 5.0,
+  "activity": 3.0,
+  "bmi": 24.0
 }
 
-## Example Output
+Response:
 
 {
-  "sleep_quality": "Good"
+  "sleep_quality": "Good",
+  "confidence": 0.82,
+  "top_factors": ["stress", "activity"],
+  "suggestions": [
+    "Try reducing stress before bedtime",
+    "Increase physical activity during the day"
+  ]
 }
 
-The system provides:
-- prediction
-- confidence score
-- key influencing factors
-- personalized suggestions
-  
-## Model
+Docker
 
-The model is trained on a sleep health dataset and uses supervised learning to classify sleep quality.
-Note: Performance may vary depending on dataset quality and generalization limits.
+docker build -t sleep-app .
+docker run -p 8000:8000 sleep-app
 
-## Future Improvements
-Add frontend dashboard
-Improve model generalization
-Add user history tracking
-Deploy as a cloud service
-##  Disclaimer
-This project is for educational purposes only and is not intended for medical use.
-##Author
+Limitation:
+ Model trained on only 4 synthetic samples
+ No cross-validation or hyperparameter tuning
+ Tests don't validate output values
+ Frontend URL hardcoded to localhost
+ No persistence / user history
+
+Planned Improvement
+ Replace with real dataset (e.g., Sleep Health Kaggle – 400+ records)
+ Add GridSearchCV and MLflow tracking
+ Add edge-case tests (negative age, missing fields)
+ Make configurable via environment variable
+ Add SQLite database + user sessions
+
+## Future Roadmap (if this were a real product)
+
+Replace training script with proper EDA notebook
+Add CI/CD (GitHub Actions for auto-testing)
+Deploy to cloud (Render / Railway) with live demo link
+Add model versioning (DVC or MLflow)
+Implement A/B testing framework (simulated)
+
+## What I Learned / Demonstrated
+
+Separation of concerns (routing → service → model)
+API contract validation with Pydantic
+Feature importance for basic explainability
+Containerization basics (Docker)
+Importance of realistic datasets (this project revealed that)
+
+Author
 Martina Misiano
+
+## License
+
+Educational use only. Not for clinical/medical purposes.
+
+
