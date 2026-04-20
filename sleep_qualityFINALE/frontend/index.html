@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sleep Dashboard</title>
+<style>
+body { font-family: Arial; text-align:center; }
+input { margin:5px; padding:5px; }
+button { padding:10px; margin:5px; }
+</style>
+</head>
+<body>
+<h1>Sleep Quality App</h1>
+
+<input id="age" placeholder="Age"><br>
+<input id="stress" placeholder="Stress"><br>
+<input id="activity" placeholder="Activity"><br>
+<input id="bmi" placeholder="BMI"><br>
+
+<button onclick="predict()">Predict</button>
+
+<h2 id="res"></h2>
+<h3 id="factors"></h3>
+
+<script>
+async function predict(){
+ const data={
+  age:+age.value,
+  stress:+stress.value,
+  activity:+activity.value,
+  bmi:+bmi.value
+ };
+
+ const r=await fetch("http://127.0.0.1:8000/predict",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify(data)
+ });
+
+ const j=await r.json();
+ res.innerText="Sleep Quality: "+j.sleep_quality;
+ factors.innerText="Top factors: "+j.top_factors.join(", ");
+}
+</script>
+</body>
+</html>
