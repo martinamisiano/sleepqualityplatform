@@ -1,4 +1,4 @@
-# Sleep Quality Platform (Top 10%)
+# Sleep Quality Platform 
 
 ## Features
 - ML prediction
