@@ -48,3 +48,26 @@ def test_root():
     response = client.get("/")
     assert response.status_code == 200
     assert "Sleep Quality Predictor" in response.json()["message"]
+
+from unittest.mock import patch  # Aggiungi all'inizio del file con gli altri import
+
+def test_prediction_with_mock():
+    """Test con mocking del servizio di predizione"""
+    mock_result = {
+        "sleep_quality": "Good",
+        "confidence": 0.95,
+        "top_factors": ["stress", "activity"],
+        "suggestions": ["Test suggestion"],
+        "probabilities": {"Poor": 0.05, "Good": 0.95}
+    }
+    
+    with patch('backend.services.prediction_service.predict', return_value=mock_result):
+        response = client.post("/v1/predict", json={
+            "age": 30,
+            "stress_level": 5,
+            "physical_activity": 3,
+            "bmi": 24
+        })
+        assert response.status_code == 200
+        assert response.json()["sleep_quality"] == "Good"
+        assert response.json()["confidence"] == 0.95
