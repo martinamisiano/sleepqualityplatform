@@ -37,8 +37,11 @@ async function predict(){
  });
 
  const j=await r.json();
- res.innerText="Sleep Quality: "+j.sleep_quality;
- factors.innerText="Top factors: "+j.top_factors.join(", ");
+ res.innerText = "Sleep Quality: " + j.sleep_quality;
+ confidence.innerText = "Confidence: " + j.confidence;
+ factors.innerText = "Top factors: " + j.top_factors.join(", ");
+ suggestions.innerText = "Suggestions: " + j.suggestions.join(", ");
+
 }
 </script>
 </body>
