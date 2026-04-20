@@ -4,6 +4,8 @@ from backend.services.prediction_service import predict
 import time
 from collections import defaultdict
 from datetime import datetime, timedelta
+from fastapi import Request
+from fastapi import APIRouter, HTTPException, Depends, Request
 
 router = APIRouter(prefix="/v1", tags=["predictions"])
 
@@ -23,7 +25,12 @@ def rate_limit_check(client_ip: str, max_requests: int = 10, window_seconds: int
     rate_limits[client_ip].append(now)
 
 @router.post("/predict", response_model=PredictionResponse)
-async def predict_sleep(data: UserInput, client_ip: str = "default"):
+async def predict_sleep(data: UserInput, request: Request):
+    # Estrae l'IP reale del client
+    client_ip = request.client.host
+    if client_ip is None:
+        client_ip = "unknown"
+        
     try:
         rate_limit_check(client_ip)
         result = predict(data.dict())
