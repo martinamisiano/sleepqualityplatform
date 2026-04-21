@@ -1,14 +1,32 @@
 #  Sleep Quality Predictor
-## Key Results
-- Achieved ~84% accuracy in sleep quality classification
-- Identified stress level as the most impactful factor (42%)
-- Built an end-to-end pipeline from data generation to API deployment
+# Sleep Quality Analysis and Prediction
 
-  ## Data Analysis Highlights
-- Performed feature engineering on lifestyle variables
-- Analyzed relationships between stress, activity, and sleep quality
-- Interpreted model outputs to generate actionable suggestions
-  
+## Overview
+This project focuses on analyzing and predicting sleep quality using lifestyle and physiological-related factors such as stress level, physical activity, BMI, and age.
+
+Sleep quality is a key indicator of overall health and is strongly linked to chronic conditions such as diabetes and cardiovascular diseases. The objective of this project is to explore how lifestyle factors influence sleep and to develop a data-driven model that can support health-related insights.
+
+## Key Results
+- Achieved ~84% accuracy in classifying sleep quality
+- Identified stress level as the most influential factor (42%)
+- Highlighted strong relationships between physical activity and improved sleep outcomes
+
+## Data Analysis Approach
+- Performed data cleaning and preprocessing on structured datasets
+- Conducted exploratory data analysis to identify patterns and correlations
+- Applied feature engineering to improve model interpretability
+- Used a Random Forest model to classify sleep quality
+- Interpreted model outputs to generate actionable insights
+
+## Healthcare Relevance
+This project demonstrates how data analysis and machine learning can be used to:
+- Identify behavioral factors affecting sleep quality
+- Support preventive healthcare strategies
+- Translate complex data into interpretable insights
+
+ This project is for educational purposes only and not intended for clinical use.
+
+## Technical Implementation
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green.svg)](https://fastapi.tiangolo.com/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3-orange.svg)](https://scikit-learn.org/)
