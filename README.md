@@ -1,5 +1,10 @@
 #  Sleep Quality Predictor
 
+## Key Results
+- Achieved ~84% accuracy in sleep quality classification
+- Identified stress level as the most impactful factor (42%)
+- Built an end-to-end pipeline from data generation to API deployment
+
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green.svg)](https://fastapi.tiangolo.com/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3-orange.svg)](https://scikit-learn.org/)
